@@ -1,7 +1,6 @@
 package view;
-
 import com.coti.tools.Esdia;
-
+import java.util.ArrayList;
 /*
  * @author alfonso
  */
@@ -75,7 +74,13 @@ public class simpleConsole extends ApplicationView{
     }
     
     private static void eliminarConversaciones(){
-        
+        ArrayList<Conversacion> conversaciones=c.obtenerConversaciones();
+        int numeroConversacion=Esdia.readInt("Dame el numero de la conversacion a eliminar: ");
+        if(c.eliminarConversaciones(numeroConversacion)){
+            System.out.println("Conversacion eliminada con exito");
+        }else{
+            System.out.println("No se pudo eliminar el conversacion con ese numero");
+        }
     }
     
     private static void listarConversaciones(){

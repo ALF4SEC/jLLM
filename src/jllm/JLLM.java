@@ -1,6 +1,10 @@
 package jllm;
+import model.IJson;
+import model.IXML;
 import model.ILLM;
 import model.IRepository;
+import model.RandomCSVLLM;
+import model.FakeLLM;
 import view.ApplicationView;
 import view.simpleConsole;
 /*
@@ -20,43 +24,38 @@ public class JLLM {
             llm=getLLMForOption(args[1]);
             view=getViewForOption(args[2]);
         }else{
-            repository=new ;
-            llm=new ;
+            repository=new IJson();
+            llm=new RandomCSVLLM();
             view=new simpleConsole();
         }
         
-        private static ApplicationView getViewForOption(String argumento){
-            switch (argumento){
-                case "voz":
-                    System.out.println("voz");
-                    break;
-                default:
-                    return new simpleConsole();
-            }
-        }
         
-        private static IRepository getRepositoryForOption(String argumento){
-            switch (argumento){
-                case "xml":
-                    return new IXML();
-                    break;
-                default:
-                    
-                    break;
-                
-            }
-        }
-        
-        private static ILLM getLLMForOption(String argumento){
-            switch (argumento){
-                case "fake":
-                    return 
-                    break;
-                default:
-                    
-                    break;
-            }
-        }
     }
     
+    private static ApplicationView getViewForOption(String argumento){
+        switch (argumento){
+            case "voz":
+                return new simpleConsole();
+            default:
+                return new simpleConsole();
+        }
+    }
+        
+    private static IRepository getRepositoryForOption(String argumento){
+        switch (argumento){
+            case "xml":
+                return new IXML();
+            default:
+                return new IJson();
+            }
+        }
+        
+    private static ILLM getLLMForOption(String argumento){
+        switch (argumento){
+            case "fake":
+                return new FakeLLM();
+            default:
+                return new RandomCSVLLM();
+        }
+    }
 }

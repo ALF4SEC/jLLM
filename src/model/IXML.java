@@ -2,7 +2,7 @@ package model;
 /*
  * @author alfonso
  */
-public class IXLM implements IRepository{
+public class IXML implements IRepository{
     
     @Override
     public List<Conversacion> importConversations(){

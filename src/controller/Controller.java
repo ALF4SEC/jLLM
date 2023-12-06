@@ -1,4 +1,5 @@
 package controller;
+import java.util.ArrayList;
 import model.Model;
 import view.ApplicationView;
 /*
@@ -15,4 +16,12 @@ public class Controller {
     }
     
     
+    
+    public boolean eliminarConversaciones(int numero){
+        return m.eliminarConversaciones(numero);
+    }
+    
+    public ArrayList<Conversacion> obtenerConversaciones(){
+        
+    }
 }
