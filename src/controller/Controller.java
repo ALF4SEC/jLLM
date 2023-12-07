@@ -1,7 +1,10 @@
 package controller;
 import java.util.ArrayList;
+import java.util.List;
 import model.Model;
 import view.ApplicationView;
+import model.Conversacion;
+import model.Message;
 /*
  * @author alfonso
  */
@@ -15,13 +18,19 @@ public class Controller {
         view.setController(this);
     }
     
-    
-    
-    public boolean eliminarConversaciones(int numero){
-        return m.eliminarConversaciones(numero);
+    public boolean guardarConversacion(long fechaInicio, long fechaFin){
+        return model.guardarConversacion(fechaInicio, fechaFin);
     }
     
-    public ArrayList<Conversacion> obtenerConversaciones(){
-        
+    public boolean eliminarConversaciones(int numero){
+        return model.eliminarConversaciones(numero);
+    }
+    
+    public List<Conversacion> obtenerConversaciones(){
+        return model.obtenerConversaciones();
+    }
+    
+    public ArrayList<Message> obtenerMessages(int numero){
+        return model.obtenerMessages(numero);
     }
 }

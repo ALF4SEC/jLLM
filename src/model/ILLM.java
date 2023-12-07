@@ -4,5 +4,5 @@ package model;
  */
 public interface ILLM {
     public String speak(String input);
-    public void getIdentifier();
+    public String getIdentifier();
 }

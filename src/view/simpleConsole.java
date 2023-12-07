@@ -1,6 +1,10 @@
 package view;
 import com.coti.tools.Esdia;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
+import model.Conversacion;
+import model.Message;
 /*
  * @author alfonso
  */
@@ -69,12 +73,48 @@ public class simpleConsole extends ApplicationView{
         } while(salir==false);
     }
     
-    private static void nuevaConversacion(){
+    private void nuevaConversacion(){
+        boolean salir=false;
+        String cadenaSalida="/salir";
+        String mensajeUSR;
+        
+        Instant instant=Instant.now();
+        long fechaInicio=instant.getEpochSecond();
+        
+        do{
+            mensajeUSR=Esdia.readString("Message jLLM... (Escribe /salir para terminar la conversacion)");
+            
+            if (!mensajeUSR.equals(cadenaSalida)){
+                
+            }else{
+                salir=true;
+            }
+            
+        }while(salir=false);
+        
+        long fechaFin=instant.getEpochSecond();
+        if (c.guardarConversacion(fechaInicio, fechaFin)){
+            System.out.println("Conversacion guardada correctamente");
+        }else{
+            System.out.println("Conversacion no ha podido ser guardada");
+        }
         
     }
     
-    private static void eliminarConversaciones(){
-        ArrayList<Conversacion> conversaciones=c.obtenerConversaciones();
+    private void eliminarConversaciones(){
+        int numConversacion=1;
+        int numMensaje;
+        List<Conversacion> conversaciones=c.obtenerConversaciones();
+        System.out.printf("%-10s|%-10s|%-20s|%-20s", "Numero","Fecha Inicio", "Numero de mensajes", "Primeros 20 caracteres");
+        for (Conversacion conversacion : conversaciones){
+            numMensaje=0;
+            for (Message message: conversacion.getMensajes()){
+                numMensaje++;
+            }
+            String primerMensaje=conversacion.getMensajes().get(0).getContenido();
+            System.out.printf("%-10s|%-10s|%-20s|%-20s", numConversacion,conversacion.getFechaInicio(), numMensaje, primerMensaje);
+            numConversacion++;
+        }
         int numeroConversacion=Esdia.readInt("Dame el numero de la conversacion a eliminar: ");
         if(c.eliminarConversaciones(numeroConversacion)){
             System.out.println("Conversacion eliminada con exito");
@@ -83,8 +123,29 @@ public class simpleConsole extends ApplicationView{
         }
     }
     
-    private static void listarConversaciones(){
-        
+    private void listarConversaciones(){
+        int numConversacion=1;
+        int numMensaje;
+        List<Conversacion> conversaciones=c.obtenerConversaciones();
+        System.out.printf("%-10s|%-10s|%-20s|%-20s", "Numero","Fecha Inicio", "Numero de mensajes", "Primeros 20 caracteres");
+        for (Conversacion conversacion : conversaciones){
+            numMensaje=0;
+            for (Message message: conversacion.getMensajes()){
+                numMensaje++;
+            }
+            String primerMensaje=conversacion.getMensajes().get(0).getContenido();
+            System.out.printf("%-10s|%-10s|%-20s|%-20s", numConversacion,conversacion.getFechaInicio(), numMensaje, primerMensaje);
+            numConversacion++;
+        }
+        int numero=Esdia.readInt("Dame el numero de la conversacion que quieres ver: ");
+        ArrayList<Message> mensajes=c.obtenerMessages(numero);
+        boolean salir=false;
+        do{
+            for (Message mensaje: mensajes){
+                System.out.printf("%-5s|%-10d|%-80s", mensaje.getIndentificador(), mensaje.getFechaEnvio(), mensaje.getContenido());
+            }
+            boolean opcion=Esdia.yesOrNo("Quieres dejar de ver los mensajes de la conversacion: ");
+        } while(salir==false);
     }
     
     /*private void menuExportacion(){

@@ -40,7 +40,8 @@ public class Message {
 
     //Metodos de presentacion
     public String getMessageAsString(){
-        return String.format("%-10s|%80s|%20d", this.indentificador, this.contenido, this.fechaEnvio);
+        return String.format("%s[%d]%s", this.indentificador, this.fechaEnvio, this.contenido);
     }
+    
     
 }

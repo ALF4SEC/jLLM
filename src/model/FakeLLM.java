@@ -3,6 +3,7 @@ package model;
  * @author alfonso
  */
 public class FakeLLM implements ILLM{
+    String identificador="Fake";
     
     @Override
     public String speak(String input){
@@ -10,7 +11,7 @@ public class FakeLLM implements ILLM{
     }
     
     @Override
-    public void getIdentifier(){
-        
+    public String getIdentifier(){
+        return String.format("%s", identificador);
     }
 }
