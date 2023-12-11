@@ -21,8 +21,8 @@ public class RandomCSVLLM implements ILLM{
         ArrayList<Frase> frases=importarFrase();
         do{
             int numero=(int)(Math.random()*40+1);
-            for (Frase frase: frases){
-                if(frase.getLongitud()==numero){
+            for(Frase frase:frases){
+                if(frases.get(numero).equals(frase)){
                     cadena=frase.getFrase();
                     salir=true;
                 }

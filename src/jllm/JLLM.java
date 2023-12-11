@@ -1,10 +1,12 @@
 package jllm;
+import controller.Controller;
 import model.IJson;
 import model.IXML;
 import model.ILLM;
 import model.IRepository;
 import model.RandomCSVLLM;
 import model.FakeLLM;
+import model.Model;
 import view.ApplicationView;
 import view.simpleConsole;
 /*
@@ -29,7 +31,10 @@ public class JLLM {
             view=new simpleConsole();
         }
         
+        Model model=new Model(repository, llm);
+        Controller c=new Controller(model, view);
         
+        c.initApplication();
     }
     
     private static ApplicationView getViewForOption(String argumento){
@@ -58,4 +63,5 @@ public class JLLM {
                 return new RandomCSVLLM();
         }
     }
+    
 }

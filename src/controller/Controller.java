@@ -18,8 +18,17 @@ public class Controller {
         view.setController(this);
     }
     
+    
     public boolean guardarConversacion(long fechaInicio, long fechaFin){
         return model.guardarConversacion(fechaInicio, fechaFin);
+    }
+    
+    public String nuevaConversacion(String mensajeUSR){
+        
+    }
+    
+    public String mostrarMensajes(String usuario, String mensajeUSR){
+        
     }
     
     public boolean eliminarConversaciones(int numero){
@@ -32,5 +41,35 @@ public class Controller {
     
     public ArrayList<Message> obtenerMessages(int numero){
         return model.obtenerMessages(numero);
+    }
+    
+    public boolean importarConversaciones(){
+        return model.importarConversaciones();
+    }
+    
+    public boolean exportarConversaciones(){
+        return model.exportarConversaciones();
+    }
+    
+     public void initApplication(){
+        
+        // Carga inicial programa
+        if(model.cargarEstadoAplicación()){
+            view.showApplicationStart("Cargado estado anterior con exito");
+        }else{
+            view.showApplicationStart("No se encontró fichero para carga del programa");
+        }
+        
+        // Menú principal
+        view.showMainMenu();
+        
+        
+        // Guardado final del programa
+        if(model.guardarEstadoAplicación()){
+            view.showApplicationEnd("Guardado el estado de la aplicación.\nSaliendo...");
+        }else{
+            view.showApplicationEnd("No se pudo guardar el estado de la aplicación.\nSaliendo...");
+        }
+        
     }
 }

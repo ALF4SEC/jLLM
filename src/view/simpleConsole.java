@@ -36,9 +36,9 @@ public class simpleConsole extends ApplicationView{
                 case 2:
                     menuCRUD();
                     break;
-                /*case 3:
+                case 3:
                     menuExportacion();
-                    break;*/
+                    break;
                 case 4:
                     salir=true;
                     break;
@@ -76,20 +76,24 @@ public class simpleConsole extends ApplicationView{
     private void nuevaConversacion(){
         boolean salir=false;
         String cadenaSalida="/salir";
-        String mensajeUSR;
+        String usuario="Yo";
         
         Instant instant=Instant.now();
         long fechaInicio=instant.getEpochSecond();
         
         do{
-            mensajeUSR=Esdia.readString("Message jLLM... (Escribe /salir para terminar la conversacion)");
+            String mensajeUSR=Esdia.readString("Message jLLM... (Escribe /salir para terminar la conversacion)");
+            String cadena=mensajeUSR;
             
-            if (!mensajeUSR.equals(cadenaSalida)){
+            if (!cadena.equals(cadenaSalida)){
+                String mostrarMensaje=c.mostrarMensajes(usuario, mensajeUSR);
+                System.out.println(mostrarMensaje);
                 
+                String mensajeLLM=c.nuevaConversacion(mensajeUSR);
+                System.out.println(mensajeLLM);
             }else{
                 salir=true;
             }
-            
         }while(salir=false);
         
         long fechaFin=instant.getEpochSecond();
@@ -148,11 +152,11 @@ public class simpleConsole extends ApplicationView{
         } while(salir==false);
     }
     
-    /*private void menuExportacion(){
+    private void menuExportacion(){
         boolean salir=false;
         do{
-            System.out.println("1.- Conservar conversaciones"); 
-            System.out.println("2.- Eliminar conversaciones");
+            System.out.println("1.- Importar conversaciones"); 
+            System.out.println("2.- Exportar conversaciones");
             System.out.println("3.- Salir");
             int opcion=Esdia.readInt("Dame una opcion: ");
             switch(opcion){
@@ -170,22 +174,35 @@ public class simpleConsole extends ApplicationView{
                     break;         
             }
         } while(salir==false);
-    }*/
+    }
     
-    /*private void importarConversaciones(){
+    private void importarConversaciones(){
         if (c.importarConversaciones()){
             System.out.println("Conversacion importada con exito");
         } else{
             System.out.println("Conversacion no hasido importada, se produjo un error");
         }
-    }*/
+    }
     
-    /*private void exportarConversaciones(){
+    private void exportarConversaciones(){
         if (c.exportarConversaciones()){
             System.out.println("Conversacion exportada con exito");
         } else{
             System.out.println("Conversacion no hasido exportada, se produjo un error");
         }
-    }*/
-            
+    }
+    
+    private static void tituloApp(){
+        System.out.println("   ,,                                         ");
+        System.out.println("   db `7MMF'      `7MMF'      `7MMM.     ,MMF'");
+        System.out.println("        MM          MM          MMMb    dPMM  ");
+        System.out.println(" `7MM   MM          MM          M YM   ,M MM  ");
+        System.out.println("   MM   MM          MM          M  Mb  M' MM  ");
+        System.out.println("   MM   MM      ,   MM      ,   M  YM.P'  MM  ");
+        System.out.println("   MM   MM     ,M   MM     ,M   M  `YM'   MM  ");
+        System.out.println("   MM .JMMmmmmMMM .JMMmmmmMMM .JML. `'  .JMML.");
+        System.out.println("QO MP ");
+        System.out.println("`bmP ");
+    }
+    
 }
