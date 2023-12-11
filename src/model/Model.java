@@ -25,13 +25,9 @@ public class Model {
         conversaciones = new ArrayList<>();
     }
     
-    public boolean guardarConversacion(long fechaInicio, long fechaFin){ 
-        return conversaciones.add(new Conversacion(illm.getIdentifier(), , fechaInicio, fechaFin));
-    }
     
-    public String getMessageAsString(String identificador, String contenido){
-        
-    }
+    
+    public boolean guardarConversacion(long fechaInicio, long fechaFin)
     
     public boolean eliminarConversaciones(int numero){
         int numeroConversacionActual=1;

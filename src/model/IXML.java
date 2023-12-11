@@ -1,6 +1,8 @@
 package model;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.io.File;
@@ -9,11 +11,21 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.List;
 
 /*
  * @author alfonso
  */
 public class IXML implements IRepository{
+    
+    @JacksonXmlRootElement(localName = "Conversacion")
+    public class ConversacionXML {
+        private String identificador;
+        private long fechaInicio, fechaFin;
+    }
+    @JacksonXmlElementWrapper(localName = "Mensajes")
+    private List<Message> mensajes;
+    
     
     @Override
     public ArrayList<Conversacion> importConversations(){

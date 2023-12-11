@@ -39,7 +39,7 @@ public class Message {
     }
 
     //Metodos de presentacion
-    public String getMessageAsString(){
+    public String getMessageAsString(String identificador, String contenido, long fechaEnvio){
         return String.format("%s[%d]%s", this.indentificador, this.fechaEnvio, this.contenido);
     }
     

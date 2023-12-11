@@ -19,16 +19,13 @@ public class Controller {
     }
     
     
+    
+    
+    
+    
+    
     public boolean guardarConversacion(long fechaInicio, long fechaFin){
         return model.guardarConversacion(fechaInicio, fechaFin);
-    }
-    
-    public String nuevaConversacion(String mensajeUSR){
-        
-    }
-    
-    public String mostrarMensajes(String usuario, String mensajeUSR){
-        
     }
     
     public boolean eliminarConversaciones(int numero){
@@ -72,4 +69,5 @@ public class Controller {
         }
         
     }
+
 }
