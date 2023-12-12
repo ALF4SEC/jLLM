@@ -19,20 +19,23 @@ public class Controller {
     }
     
     
+    public String speakLLM(String mensajeUSR){
+        return model.speakLLM(mensajeUSR);
+    }
     
+    public String mostrarMensajes(String usuario, String mensajeUSR){
+        return model.mostrarMensajes(usuario, mensajeUSR);
+    } 
     
-    
-    
-    
-    public boolean guardarConversacion(long fechaInicio, long fechaFin){
-        return model.guardarConversacion(fechaInicio, fechaFin);
+    public boolean guardarConversacion(long fechaInicio){
+        return model.guardarConversacion(fechaInicio);
     }
     
     public boolean eliminarConversaciones(int numero){
         return model.eliminarConversaciones(numero);
     }
     
-    public List<Conversacion> obtenerConversaciones(){
+    public ArrayList<Conversacion> obtenerConversaciones(){
         return model.obtenerConversaciones();
     }
     
@@ -70,4 +73,5 @@ public class Controller {
         
     }
 
+    
 }

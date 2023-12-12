@@ -1,16 +1,22 @@
 package model;
+
+import java.io.Serializable;
+
 /*
  * @author alfonso
  */
-public class Message {
+public class Message implements Serializable{
     private String indentificador, contenido;
-    private long fechaEnvio;
+    private String fechaEnvio;
     
     //Constructor
-    public Message(String identificador, String contenido, long fechaEnvio){
+    public Message(String identificador, String contenido, String fechaEnvio){
         this.indentificador=identificador;
         this.contenido=contenido;
         this.fechaEnvio=fechaEnvio;
+    }
+    
+    public Message(){
     }
     
     //Setters y getters
@@ -30,18 +36,11 @@ public class Message {
         return contenido;
     }
 
-    public void setFechaEnvio(long fechaEnvio) {
+    public void setFechaEnvio(String fechaEnvio) {
         this.fechaEnvio = fechaEnvio;
     }
 
-    public long getFechaEnvio() {
+    public String getFechaEnvio() {
         return fechaEnvio;
     }
-
-    //Metodos de presentacion
-    public String getMessageAsString(String identificador, String contenido, long fechaEnvio){
-        return String.format("%s[%d]%s", this.indentificador, this.fechaEnvio, this.contenido);
-    }
-    
-    
 }

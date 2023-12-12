@@ -6,35 +6,78 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 /*
  * @author alfonso
  */
 public class Model {
-    private ArrayList<Conversacion> conversaciones;
+    private ArrayList<Conversacion> conversaciones=new ArrayList<>();
+    private ArrayList<Message> mensajes=new ArrayList<>();
     private ILLM illm;
     private IRepository irep;
     private File ficheroEstadoSerializado;
+    private String nombreBinario="model.bin";
     
     public Model(IRepository irep, ILLM illm) {
         this.irep = irep;
         this.illm=illm;
         ficheroEstadoSerializado = Paths.get(System.getProperty("user.home"), "Desktop", "CregoCalvoAlfonso", "model.bin").toFile();
-        conversaciones = new ArrayList<>();
+        conversaciones=new ArrayList<>();
+        mensajes=new ArrayList<>();
     }
     
+    public String speakLLM(String mensajeUSR){
+        Instant instant=Instant.now();
+        long fechaInicio=instant.getEpochSecond();
+        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(fechaInicio);
+        String fechaEnvio = formatter.format(calendar.getTime());      
+        String respuesta=illm.speak(mensajeUSR);
+        mensajes.add(new Message (illm.getIdentifier(), respuesta, fechaEnvio));
+        return String.format("%s[%s]%s", illm.getIdentifier(), fechaEnvio, respuesta);
+    }
     
+    public String mostrarMensajes(String usuario, String mensajeUSR){
+        Instant instant=Instant.now();
+        long fechaInicio=instant.getEpochSecond();
+        DateFormat formatter=new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTimeInMillis(fechaInicio);
+        String fechaEnvio=formatter.format(calendar.getTime());
+        mensajes.add(new Message (usuario, mensajeUSR, fechaEnvio));
+        return String.format("%s[%s]%s", usuario, fechaEnvio, mensajeUSR);
+    }
     
-    public boolean guardarConversacion(long fechaInicio, long fechaFin)
+    public boolean guardarConversacion(long fechaIni){
+        String identificador=illm.getIdentifier();
+        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(fechaIni);
+        String fechaInicio = formatter.format(calendar.getTime());
+        Conversacion conversacion=new Conversacion(identificador, mensajes, fechaInicio);
+        if (conversaciones.contains(conversacion)){
+            return false;
+        }else{
+            conversaciones.add(conversacion);
+            mensajes=new ArrayList<>();
+            return true;
+        }
+    }
     
     public boolean eliminarConversaciones(int numero){
         int numeroConversacionActual=1;
         for (Conversacion conversacion:conversaciones){
             Conversacion conversacionAborrar=conversacion;
             if (numero==numeroConversacionActual){
-                conversacion.mensajes.clear();
+                for (Message mensaje: conversacionAborrar.mensajes){
+                    conversacion.mensajes.remove(mensaje);
+                }
                 conversaciones.remove(conversacionAborrar);
                 return true;
             }else{
@@ -44,12 +87,8 @@ public class Model {
         return false;
     }
     
-    public List<Conversacion> obtenerConversaciones(){
-        List<Conversacion> listaCopia = new ArrayList<>(conversaciones.size());
-        for (Conversacion conversacion : conversaciones){
-            listaCopia.add(new Conversacion(conversacion));
-        }
-        return listaCopia;
+    public ArrayList<Conversacion> obtenerConversaciones(){
+        return conversaciones;
     }
     
     public ArrayList<Message> obtenerMessages(int numero){
@@ -116,7 +155,12 @@ public class Model {
     
     public boolean guardarEstadoAplicación() {
         ObjectOutputStream oos = null;
+        
         try {
+            if(!ficheroEstadoSerializado.exists()){
+                ficheroEstadoSerializado.createNewFile();
+            }
+            
             oos = new ObjectOutputStream(new FileOutputStream(ficheroEstadoSerializado));
             oos.writeObject(conversaciones);
             return true;

@@ -14,6 +14,8 @@ public class Frase {
         this.longitud = longitud;
     }
     
+    public Frase(){
+    }
     //Getters y setters
     public void setTipoFrase(String tipoFrase) {
         this.tipoFrase = tipoFrase;

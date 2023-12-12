@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /*
  * @author alfonso
@@ -35,12 +36,12 @@ public class IJson implements IRepository{
         File fileExport=new File(rutaExport);
         Gson gson = new Gson();
         String json = gson.toJson(conversaciones);
-        try{
+        try {
             Files.write(fileExport.toPath(), json.getBytes(StandardCharsets.UTF_8));
-            return true;
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
+        return true;
     }
 }

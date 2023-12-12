@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /*
  * @author alfonso
@@ -23,6 +24,7 @@ public class IXML implements IRepository{
         private String identificador;
         private long fechaInicio, fechaFin;
     }
+    
     @JacksonXmlElementWrapper(localName = "Mensajes")
     private List<Message> mensajes;
     
@@ -33,12 +35,14 @@ public class IXML implements IRepository{
         File fileImport=new File(rutaImport);
         
         ObjectMapper xmlMapper = new XmlMapper();
-        try{
-            String xml=new String(Files.readAllBytes(fileImport.toPath()), StandardCharsets.UTF_8);
-            Type type=new TypeToken<ArrayList<Conversacion>>(){}.getType();
-            ArrayList<Conversacion> conversaciones=xmlMapper.readValue(xml, type);
-            return conversaciones;
-        }catch (IOException e){
+        try (Scanner scannerRef = new Scanner(fileImport)) {
+            StringBuilder xml = new StringBuilder();
+            while (scannerRef.hasNext()) {
+                xml.append(scannerRef.nextLine());
+            }
+            return xmlMapper.readValue(xml.toString(), Conversacion.class);
+        } catch (IOException e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -47,15 +51,14 @@ public class IXML implements IRepository{
     public boolean exportConversations(ArrayList<Conversacion> conversaciones){
         String rutaExport=System.getProperty("user.home")+File.separator+"Desktop"+File.separator+"CregoCalvoAlfonso"+"output.json";
         File fileExport=new File(rutaExport);
-        
         ObjectMapper xmlMapper = new XmlMapper();
         try {
             String xml = xmlMapper.writeValueAsString(conversaciones);
             Files.write(fileExport.toPath(), xml.getBytes(StandardCharsets.UTF_8));
-            return true;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
+        return true;
     }
 }

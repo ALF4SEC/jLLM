@@ -1,34 +1,39 @@
 package model;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 /*
  * @author alfonso
  */
 public class RandomCSVLLM implements ILLM{
     String identificador="RandomCSVLLM";
-    Path ruta = Paths.get(System.getProperty("user.home"), "Desktop", "CregoCalvoAlfonso","input.csv");
-    String delimitador = ",";
+    Random random = new Random();
     
     @Override
     public String speak(String input){
-        boolean salir=false;
-        String cadena=null;
+        int numeroMensajesImportados=0;
         ArrayList<Frase> frases=importarFrase();
-        do{
-            int numero=(int)(Math.random()*40+1);
-            for(Frase frase:frases){
-                if(frases.get(numero).equals(frase)){
-                    cadena=frase.getFrase();
-                    salir=true;
-                }
-            }
-        }while(salir==false);
-        return cadena;
+        ArrayList<String> mensajesImportados=new ArrayList<>();
+        
+        for(Frase frase:frases){
+            mensajesImportados.add(frase.getFrase());
+            numeroMensajesImportados++;
+        }
+        
+        int numeroAleatorio = random.nextInt(numeroMensajesImportados);
+        
+        String mensajeAEnviar=mensajesImportados.get(numeroAleatorio);
+        return mensajeAEnviar;    
     }
     
     @Override
@@ -37,9 +42,11 @@ public class RandomCSVLLM implements ILLM{
     }
     
     public ArrayList<Frase> importarFrase(){
-       ArrayList<Frase> frases = new ArrayList<>();
+        Path ruta = Paths.get(System.getProperty("user.home"), "Desktop", "CregoCalvoAlfonso","input.csv");
+        String delimitador = ",";
+        ArrayList<Frase> frases = new ArrayList<>();
         try {
-            List<String> lineas = Files.readAllLines(ruta);
+            List<String> lineas = Files.readAllLines(ruta, StandardCharsets.UTF_8);
             for (String linea : lineas) {
                 Frase p = Frase.getFraseFromDelimitedString(linea, delimitador);
                 if (p != null) {
