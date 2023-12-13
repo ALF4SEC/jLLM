@@ -25,7 +25,7 @@ public class Model {
     public Model(IRepository irep, ILLM illm) {
         this.irep = irep;
         this.illm=illm;
-        ficheroEstadoSerializado = Paths.get(System.getProperty("user.home"), "Desktop", "jLLM", "model.bin").toFile();
+        ficheroEstadoSerializado = Paths.get(System.getProperty("user.home"), "Desktop", "CregoCalvoAlfonso", "jLLM", "model.bin").toFile();
         conversaciones=new ArrayList<>();
         mensajes=new ArrayList<>();
     }
@@ -60,7 +60,7 @@ public class Model {
     public boolean guardarEstadoAplicación(){
         ObjectOutputStream oos = null;
         try {
-            oos = new ObjectOutputStream(new FileOutputStream("model.bin"));
+            oos = new ObjectOutputStream(new FileOutputStream(ficheroEstadoSerializado));
             oos.writeObject(conversaciones);
             return true;
         } catch (IOException ex) {

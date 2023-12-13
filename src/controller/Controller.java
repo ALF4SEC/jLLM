@@ -17,8 +17,7 @@ public class Controller {
         this.view=view;
         view.setController(this);
     }
-    
-    
+     
     public String speakLLM(String mensajeUSR){
         return model.speakLLM(mensajeUSR);
     }

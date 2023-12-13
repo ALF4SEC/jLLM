@@ -15,25 +15,30 @@ import java.util.Random;
 public class RandomCSVLLM implements ILLM {
     String identificador = "RandomCSVLLM";
     Random random = new Random();
-    ArrayList<Frase> frases = new ArrayList<>();
     int numeroAleatorio;
 
     @Override
     public String speak(String input) {
-        int numeroMensajesImportados = 0;
+        int numeroMensajesImportados=0;
+        int recorrido=0;
+        ArrayList<Frase> frases = new ArrayList<>();
         ArrayList<String> mensajesImportados = new ArrayList<>();
 
+        frases=importarFrase();
         for (Frase frase : frases) {
             mensajesImportados.add(frase.getFrase());
             numeroMensajesImportados++;
         }
 
-        
-        while (0>numeroAleatorio&&numeroAleatorio>=numeroMensajesImportados){
-            numeroAleatorio=random.nextInt(numeroMensajesImportados);
+        numeroAleatorio=(int)(Math.random()*numeroMensajesImportados+0);
+        String mensajeAEnviar=null;
+        //String mensajeAEnviar=String.format("%d", numeroMensajesImportados);
+        for (String c:mensajesImportados){
+            if (numeroAleatorio==recorrido){
+                mensajeAEnviar=c;
+            }
+            recorrido++;
         }
-        String mensajeAEnviar=String.format("%d", frases.size());
-        //String mensajeAEnviar=mensajesImportados.get(numeroAleatorio);
         return mensajeAEnviar;
     }
 
@@ -45,6 +50,7 @@ public class RandomCSVLLM implements ILLM {
     public ArrayList<Frase> importarFrase() {
         Path ruta = Paths.get(System.getProperty("user.home"), "Desktop", "CregoCalvoAlfonso", "input.csv");
         String delimitador = ",";
+        ArrayList<Frase> frases = new ArrayList<>();
         try {
             List<String> lineas = Files.readAllLines(ruta, StandardCharsets.UTF_8);
             for (String linea : lineas) {

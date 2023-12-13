@@ -27,7 +27,7 @@ public class JLLM {
             view=getViewForOption(args[2]);
         }else{
             repository=new IJson();
-            llm=new FakeLLM();
+            llm=new RandomCSVLLM();
             view=new simpleConsole();
         }
         

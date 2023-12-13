@@ -26,7 +26,30 @@ public class FakeLLM implements ILLM{
         }
         
         if (output==null){
-            output="Disculpe no entendi, reescriba la frase";
+            switch(numero){
+                case 1:
+                    return String.format("Hakim, me trae un kebab");
+                case 2:
+                    return String.format("En fin el Sanchismo");
+                case 3:
+                    return String.format("Diablo, escuchaste el rempalago");
+                case 4:
+                    return String.format("No hombre no");
+                case 5:
+                    return String.format("Todo bien por casa");
+                case 6:
+                    return String.format("Ale, adio");
+                case 7:
+                    return String.format("illo, pero que haces por aqui pisha");
+                case 8:
+                    return String.format("Que grande eres bro");
+                case 9:
+                    return String.format("Discupa, que?");
+                case 10:
+                    return String.format("Dios, que guapo chaval");
+                default:
+                    return String.format("Milei, presidente de la Republica Argentina");
+            }
         }
         return output;
     }
