@@ -6,6 +6,7 @@ import java.io.Serializable;
  * @author alfonso
  */
 public class Message implements Serializable{
+    private static final long serialVersionUID = 1L;
     private String indentificador, contenido;
     private String fechaEnvio;
     

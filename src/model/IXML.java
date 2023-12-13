@@ -1,64 +1,46 @@
 package model;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 /*
  * @author alfonso
  */
 public class IXML implements IRepository{
-    
-    @JacksonXmlRootElement(localName = "Conversacion")
-    public class ConversacionXML {
-        private String identificador;
-        private long fechaInicio, fechaFin;
-    }
-    
-    @JacksonXmlElementWrapper(localName = "Mensajes")
-    private List<Message> mensajes;
-    
+    XmlMapper xmlMapper=new XmlMapper();
     
     @Override
     public ArrayList<Conversacion> importConversations(){
-        String rutaImport=System.getProperty("user.home")+File.separator+"Desktop"+File.separator+"CregoCalvoAlfonso"+"input.xml";
-        File fileImport=new File(rutaImport);
+        Path rutaImport=Paths.get(System.getProperty("user.home"), "Desktop", "CregoCalvoAlfonso", "input.xml");
+        File file=rutaImport.toFile();
         
-        ObjectMapper xmlMapper = new XmlMapper();
-        try (Scanner scannerRef = new Scanner(fileImport)) {
-            StringBuilder xml = new StringBuilder();
-            while (scannerRef.hasNext()) {
-                xml.append(scannerRef.nextLine());
-            }
-            return xmlMapper.readValue(xml.toString(), Conversacion.class);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!file.exists()&&!file.isFile()){
+            return null;
+        }
+        
+        try{
+           String xml=new String(Files.readAllBytes(rutaImport), StandardCharsets.UTF_8);
+           ArrayList<Conversacion> conversaciones = xmlMapper.readValue(xml, xmlMapper.getTypeFactory().constructCollectionType(ArrayList.class, Conversacion.class));
+           return conversaciones;
+        }catch (IOException e) {
             return null;
         }
     }
     
     @Override
     public boolean exportConversations(ArrayList<Conversacion> conversaciones){
-        String rutaExport=System.getProperty("user.home")+File.separator+"Desktop"+File.separator+"CregoCalvoAlfonso"+"output.json";
-        File fileExport=new File(rutaExport);
-        ObjectMapper xmlMapper = new XmlMapper();
+        Path rutaImport=Paths.get(System.getProperty("user.home"), "Desktop", "CregoCalvoAlfonso", "output.xml");
+        
         try {
-            String xml = xmlMapper.writeValueAsString(conversaciones);
-            Files.write(fileExport.toPath(), xml.getBytes(StandardCharsets.UTF_8));
+            String xml=xmlMapper.writeValueAsString(conversaciones);
+            Files.write(rutaImport, xml.getBytes(StandardCharsets.UTF_8));
+            return true;    
         } catch (IOException e) {
-            e.printStackTrace();
             return false;
         }
-        return true;
     }
 }

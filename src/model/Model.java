@@ -1,6 +1,7 @@
 package model;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 /*
  * @author alfonso
  */
@@ -20,15 +20,64 @@ public class Model {
     private ArrayList<Message> mensajes=new ArrayList<>();
     private ILLM illm;
     private IRepository irep;
-    private File ficheroEstadoSerializado;
-    private String nombreBinario="model.bin";
+    File ficheroEstadoSerializado;
     
     public Model(IRepository irep, ILLM illm) {
         this.irep = irep;
         this.illm=illm;
-        ficheroEstadoSerializado = Paths.get(System.getProperty("user.home"), "Desktop", "CregoCalvoAlfonso", "model.bin").toFile();
+        ficheroEstadoSerializado = Paths.get(System.getProperty("user.home"), "Desktop", "jLLM", "model.bin").toFile();
         conversaciones=new ArrayList<>();
         mensajes=new ArrayList<>();
+    }
+    
+    public boolean cargarEstadoAplicación(){
+        if (ficheroEstadoSerializado.exists() && ficheroEstadoSerializado.isFile()){
+            ObjectInputStream ois = null;
+            try {
+                ois = new ObjectInputStream(new FileInputStream(ficheroEstadoSerializado));
+                this.conversaciones = (ArrayList<Conversacion>) ois.readObject();
+            } catch (IOException | ClassNotFoundException ex) {
+                // Dejamos el error para la depuración, por el canal err.
+                System.err.println("Error durante la deserialización: " + ex.getMessage());
+                return false;
+            } finally {
+                if (ois != null) {
+                    try {
+                        ois.close();
+                    } catch (IOException ex) {
+                        // Dejamos el error para la depuración, por el canal err.
+                        System.err.println("Error durante la deserialización: " + ex.getMessage());
+                        return false;
+                    }
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public boolean guardarEstadoAplicación(){
+        ObjectOutputStream oos = null;
+        try {
+            oos = new ObjectOutputStream(new FileOutputStream("model.bin"));
+            oos.writeObject(conversaciones);
+            return true;
+        } catch (IOException ex) {
+            // Dejamos el error para la depuración, por el canal err.
+            System.err.println("Error durante la serialización: " + ex.getMessage());
+            return false;
+        } finally {
+            if (oos!=null) {
+                try {
+                    oos.close();
+                } catch (IOException ex) {
+                    // Dejamos el error para la depuración, por el canal err.
+                    System.err.println("Error al cerrar el flujo: " + ex.getMessage());
+                    return false;
+                }
+            }
+        }
     }
     
     public String speakLLM(String mensajeUSR){
@@ -75,9 +124,6 @@ public class Model {
         for (Conversacion conversacion:conversaciones){
             Conversacion conversacionAborrar=conversacion;
             if (numero==numeroConversacionActual){
-                for (Message mensaje: conversacionAborrar.mensajes){
-                    conversacion.mensajes.remove(mensaje);
-                }
                 conversaciones.remove(conversacionAborrar);
                 return true;
             }else{
@@ -89,22 +135,6 @@ public class Model {
     
     public ArrayList<Conversacion> obtenerConversaciones(){
         return conversaciones;
-    }
-    
-    public ArrayList<Message> obtenerMessages(int numero){
-        ArrayList<Message> mensajes;
-        int contador=1;    
-        for (Conversacion conversacion : conversaciones){
-            if (contador==numero){
-                mensajes=conversacion.getMensajes();
-                for (Message mensaje:conversacion.getMensajes()){
-                    mensajes.add(mensaje);
-                }
-                return mensajes;
-            }
-            contador++;           
-        }
-        return null;
     }
     
     public boolean importarConversaciones(){
@@ -125,60 +155,5 @@ public class Model {
         return irep.exportConversations(conversaciones);
     }
     
-    public boolean cargarEstadoAplicación(){
-        if (ficheroEstadoSerializado.exists() && ficheroEstadoSerializado.isFile()) {
-            ObjectInputStream ois = null;
-            try {
-                ois = new ObjectInputStream(new FileInputStream(ficheroEstadoSerializado));
-                this.conversaciones = (ArrayList<Conversacion>) ois.readObject();
-            } catch (IOException | ClassNotFoundException ex) {
-                // Dejamos el error para la depuración, por el canal err.
-                System.err.println("Error durante la deserialización: " + ex.getMessage());
-                return false;
-            } finally {
-                if (ois != null) {
-                    try {
-                        ois.close();
-                    } catch (IOException ex) {
-                        // Dejamos el error para la depuración, por el canal err.
-                        System.err.println("Error durante la deserialización: " + ex.getMessage());
-                        return false;
-                    }
-                }
-            }
-            return true;
-        } else {
-            return false;
-        }
-
-    }
     
-    public boolean guardarEstadoAplicación() {
-        ObjectOutputStream oos = null;
-        
-        try {
-            if(!ficheroEstadoSerializado.exists()){
-                ficheroEstadoSerializado.createNewFile();
-            }
-            
-            oos = new ObjectOutputStream(new FileOutputStream(ficheroEstadoSerializado));
-            oos.writeObject(conversaciones);
-            return true;
-        } catch (IOException ex) {
-            // Dejamos el error para la depuración, por el canal err.
-            System.err.println("Error durante la serialización: " + ex.getMessage());
-            return false;
-        } finally {
-            if (oos != null) {
-                try {
-                    oos.close();
-                } catch (IOException ex) {
-                    // Dejamos el error para la depuración, por el canal err.
-                    System.err.println("Error al cerrar el flujo: " + ex.getMessage());
-                    return false;
-                }
-            }
-        }
-
-    }
 }

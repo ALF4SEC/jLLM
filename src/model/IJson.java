@@ -6,22 +6,26 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 /*
  * @author alfonso
  */
 public class IJson implements IRepository{
+    Gson gson = new Gson();
     
     @Override
     public ArrayList<Conversacion> importConversations(){
-        String rutaImport=System.getProperty("user.home")+File.separator+"Desktop"+File.separator+"CregoCalvoAlfonso"+"input.json";
-        File fileImport=new File(rutaImport);
-        Gson gson = new Gson();
+        Path rutaImport=Paths.get(System.getProperty("user.home"), "Desktop", "CregoCalvoAlfonso", "input.json");
+        File fileImport=rutaImport.toFile();
+        
+        if(!fileImport.exists()&&!fileImport.isFile()){
+            return null;
+        }
+        
         try{
-            String json=new String(Files.readAllBytes(fileImport.toPath()), StandardCharsets.UTF_8);
+            String json=new String(Files.readAllBytes(rutaImport), StandardCharsets.UTF_8);
             Type type=new TypeToken<ArrayList<Conversacion>>(){}.getType();
             ArrayList<Conversacion> conversaciones=gson.fromJson(json, type);
             return conversaciones;
@@ -32,16 +36,15 @@ public class IJson implements IRepository{
     
     @Override
     public boolean exportConversations(ArrayList<Conversacion> conversaciones){
-        String rutaExport=System.getProperty("user.home")+File.separator+"Desktop"+File.separator+"CregoCalvoAlfonso"+"output.json";
-        File fileExport=new File(rutaExport);
-        Gson gson = new Gson();
+        Path rutaImport=Paths.get(System.getProperty("user.home"), "Desktop", "CregoCalvoAlfonso", "output.json");
+        File fileImport=rutaImport.toFile();
         String json = gson.toJson(conversaciones);
+        
         try {
-            Files.write(fileExport.toPath(), json.getBytes(StandardCharsets.UTF_8));
+            Files.write(fileImport.toPath(), json.getBytes(StandardCharsets.UTF_8));
+            return true;
         } catch (IOException e) {
-            e.printStackTrace();
             return false;
         }
-        return true;
     }
 }

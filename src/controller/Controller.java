@@ -39,10 +39,6 @@ public class Controller {
         return model.obtenerConversaciones();
     }
     
-    public ArrayList<Message> obtenerMessages(int numero){
-        return model.obtenerMessages(numero);
-    }
-    
     public boolean importarConversaciones(){
         return model.importarConversaciones();
     }

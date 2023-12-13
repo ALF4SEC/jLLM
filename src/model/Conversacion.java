@@ -5,6 +5,7 @@ import java.util.ArrayList;
  * @author alfonso
  */
 public class Conversacion implements Serializable{
+    private static final long serialVersionUID = 1L;
     String identificador;
     ArrayList<Message> mensajes;
     String fechaInicio;
