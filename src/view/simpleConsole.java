@@ -105,11 +105,11 @@ public class simpleConsole extends ApplicationView{
     }
     
     private void eliminarConversaciones(){
-        int numConversacion=1;
+        int numConversacion=0;
         int numMensaje;
         ArrayList<Conversacion> conversaciones=new ArrayList<>();
         conversaciones=c.obtenerConversaciones();
-        System.out.printf("%s|%-10s|%4s|%-20s\n", "Numero","Fecha Inicio", "Numero de mensajes", "Primeros 20 caracteres");
+        System.out.printf("%s |   %5s    | %s | %s \n", "Nº","Fecha Inicio", "Numero de mensajes", "Primeros 20 caracteres");
         for (Conversacion conversacion : conversaciones){
             numMensaje=0;
             for (Message message: conversacion.getMensajes()){
@@ -117,7 +117,7 @@ public class simpleConsole extends ApplicationView{
             }
             numConversacion++;
             String primerMensaje=conversacion.getMensajes().get(0).getContenido();
-            System.out.printf("%-6s|%-10s|%-20s|%-20s\n", numConversacion,conversacion.getFechaInicio(), numMensaje, primerMensaje);            
+            System.out.printf("%-3d|%s|%20d|%-20s\n", numConversacion,conversacion.getFechaInicio(), numMensaje, primerMensaje);            
         }
         
         if(numConversacion!=0){
@@ -136,7 +136,7 @@ public class simpleConsole extends ApplicationView{
         int numConversacion=0;
         
         ArrayList<Conversacion> conversaciones=c.obtenerConversaciones();
-        System.out.printf("%s | %7s | %s | %s \n", "Numero","Fecha Inicio", "Numero de mensajes", "Primeros 20 caracteres");
+        System.out.printf("%s |   %5s    | %s | %s \n", "Nº","Fecha Inicio", "Numero de mensajes", "Primeros 20 caracteres");
         for (Conversacion conversacion : conversaciones){
             String fechaInicio=conversacion.getFechaInicio();
             int numMensaje=0;
@@ -145,7 +145,7 @@ public class simpleConsole extends ApplicationView{
             }
             numConversacion++;
             String primerMensaje=conversacion.getMensajes().get(0).getContenido();
-            System.out.printf("%-7d|%s|%d|%-20s\n", numConversacion, fechaInicio, numMensaje, primerMensaje);
+            System.out.printf("%-3d|%s|%20d|%-20s\n", numConversacion, fechaInicio, numMensaje, primerMensaje);
         }
         
         if (numConversacion!=0){
@@ -158,7 +158,7 @@ public class simpleConsole extends ApplicationView{
             boolean salir=false;
             do{
                 for (Message mensaje: message){
-                    System.out.printf("%s|%s|%s\n", mensaje.getIndentificador(), mensaje.getFechaEnvio(), mensaje.getContenido());
+                    System.out.printf("%s[%s]%s\n", mensaje.getIndentificador(), mensaje.getFechaEnvio(), mensaje.getContenido());
                 }
                 boolean opcion=Esdia.yesOrNo("Quieres dejar de ver los mensajes de la conversacion: ");
                 if(opcion){

@@ -39,7 +39,7 @@ public class JLLM {
     
     private static ApplicationView getViewForOption(String argumento){
         switch (argumento){
-            case "voz":
+            case "consola":
                 return new simpleConsole();
             default:
                 return new simpleConsole();
